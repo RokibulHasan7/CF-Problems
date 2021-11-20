@@ -1,0 +1,141 @@
+#include<bits/stdc++.h>
+#define Fast ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define ll long long
+using namespace std;
+int dx[4]= {1,-1,0,0};
+int dy[4]= {0,0,1,-1};
+string s[55];
+int n,m;
+map<pair<int,int>,int >vis;
+bool valid(int x,int y){
+    if(x>=0 && y>=0 && x<n && y<m && s[x][y]!='#' && vis[ {x,y}]==0){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+bool valid_G(int x,int y){
+    if(x<0 || y<0 || x>=n || y>=m || s[x][y]=='#' || s[x][y]=='.' || s[x][y]=='G'){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+bool valid_B(int x,int y){
+    if(x<0 || y<0 || x>=n || y>=m || s[x][y]=='#' || s[x][y]=='B'){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+void dfs(int x,int y){
+    if(s[x][y]=='#'){
+        return;
+    }
+    vis[ {x,y}]=1;
+    for(int i=0;i<4;i++){
+        int xx=x+dx[i];
+        int yy=y+dy[i];
+        if(valid(xx,yy)){
+            dfs(xx,yy);
+        }
+    }
+}
+bool check_G(){
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(s[i][j]=='G'){
+                for (int k =0;k<4;k++){
+                    int xx=i+dx[k];
+                    int yy=j+dy[k];
+                    if(valid_G(xx,yy)){
+                        continue;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    return true;
+}
+void check_B(){
+    for (int i=0;i<n;i++){
+        for (int j=0;j<m;j++){
+            if(s[i][j]=='B'){
+                for (int k=0;k<4;k++){
+                    int xx=i+dx[k];
+                    int yy=j+dy[k];
+                    if(valid_B(xx,yy)){
+                        continue;
+                    }
+                    s[xx][yy]='#';
+                }
+            }
+        }
+    }
+}
+void init(){
+    for(int i=0;i<55;i++){
+        s[i].clear();
+    }
+}
+int main(){
+    Fast;
+    int t;
+    cin>>t;
+    while(t--){
+        init();
+        vis.clear();
+        cin>>n>>m;
+        for(int i=0;i<n;i++){
+            cin>>s[i];
+        }
+        bool ok=false;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(s[i][j]=='G'){
+                    ok=true;
+                    break;
+                }
+            }
+            if(ok){
+                break;
+            }
+        }
+        if(ok==false){
+            cout<<"Yes"<<endl;
+            continue;
+        }
+        bool G=check_G();
+        if(G==false){
+            cout<<"No"<<endl;
+            continue;
+        }
+        check_B();
+        dfs(n-1,m-1);
+        ok=true;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(s[i][j]=='G' && vis[ {i,j}]==0)
+                {
+                    ok=false;
+                    break;
+                }
+            }
+            if(ok==false){
+                break;
+            }
+        }
+        if(ok==false || vis[ {n-1,m-1}]==0){
+            cout<<"No"<<endl;
+        }
+        else{
+            cout<<"Yes"<<endl;
+        }
+    }
+}
