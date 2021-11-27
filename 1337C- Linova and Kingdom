@@ -1,0 +1,90 @@
+#include<bits/stdc++.h>
+#define Fast ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+using namespace std;
+vector<int>v[200005];
+int vis[200005];
+int deg[200005];
+int level[200005];
+int count1[200005];
+vector<int>vv;
+void init()
+{
+    for(int i=1;i<=200000;i++)
+    {
+        vis[i]=0;
+        deg[i]=0;
+        level[i]=0;
+    }
+}
+void dfs(int x,int y)
+{
+    for(int i=0; i<v[x].size(); i++)
+    {
+        if(v[x][i]!=y)
+        {
+            dfs(v[x][i],x);
+            deg[x]++;
+        }
+    }
+}
+void dfs2(int s, int e)
+{
+    vector<int>::iterator u;
+    count1[s] = 1;
+    for (u = v[s].begin(); u != v[s].end(); u++) {
+        if (*u == e)
+            continue;
+        dfs2(*u, s);
+        count1[s] += count1[*u];
+    }
+}
+void bfs(int s)
+{
+    queue <int> q;
+    q.push(s);
+    level[s] = 1 ;
+    vis[s] = 1;
+    while(!q.empty())
+    {
+        int p = q.front();
+        q.pop();
+        for(int i = 0; i < v[p].size() ; i++)
+        {
+            if(vis[v[p][i]] == 0)
+            {
+                level[v[p][i]] = level[p]+1;
+                q.push(v[p][i]);
+                vis[v[p][i]] = 1;
+            }
+        }
+    }
+}
+
+int main()
+{
+    Fast;
+    init();
+    int n,m,t,i,j,k,x,y,z,p,q;
+    cin>>n>>m;
+    for(int i=1; i<n; i++)
+    {
+        cin>>x>>y;
+        v[x].push_back(y);
+        v[y].push_back(x);
+    }
+    bfs(1);
+    dfs(1,0);
+    dfs2(1,0);
+    for(int i=1; i<=n; i++)
+    {
+        vv.push_back(((level[i]-1)-(count1[i]-1)));
+    }
+    sort(vv.rbegin(),vv.rend());
+    long long ans=0LL;
+    for(int i=1; i<=m; i++)
+    {
+        ans=ans+vv[i-1];
+    }
+    cout<<ans<<endl;
+
+}
