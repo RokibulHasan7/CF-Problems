@@ -1,0 +1,65 @@
+#include<bits/stdc++.h>
+#define Fast ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define ll long long
+using namespace std;
+long long pp[200005];
+multiset<long long>mul_set[200005];
+void s()
+{
+    ll i,j;
+    for(int i=0;i<200005;i++){
+        pp[i]=-1;
+    }
+    pp[0]=0;
+    pp[1]=1;
+    for(i=2; i<200005; i+=2){
+        pp[i]=2;
+    }
+    for(i=3; i<200005; i+=2){
+        if(pp[i]==-1){
+            pp[i]=i;
+            for(j=i*i; j<200005; j+=i){
+                if(j<200005){
+                if(pp[j]==-1){
+                    pp[j]=i;
+                }
+                }
+            }
+        }
+    }
+}
+int main()
+{
+    s();
+    Fast;
+    long long n,m,ans=1,x;
+    cin>>n;
+    for(int i=0; i<n; i++)
+    {
+        cin>>m;
+        map<long long,long long>mp;
+        while(m!=1)
+        {
+            long long val=pp[m];
+            mp[val]++;
+            m/=val;
+        }
+        for(auto x: mp){
+            mul_set[x.first].insert(x.second);
+        }
+    }
+    for(ll i=0;i<200002;i++){
+        if(mul_set[i].size()<=n-2){
+            continue;
+        }
+        else if(mul_set[i].size()==n-1){
+            ans=ans*(pow(i,*(mul_set[i].begin())));
+        }
+        else{
+            mul_set[i].erase(mul_set[i].begin());
+            ans=ans*(pow(i,*(mul_set[i].begin())));
+        }
+    }
+    cout<<ans<<endl;
+
+}
