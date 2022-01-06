@@ -1,0 +1,56 @@
+#include<bits/stdc++.h>
+#define Fast ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define ll long long
+using namespace std;
+double check(long long mid,long long h,long long c){
+    double res=1.0*h*(mid+1)+1.0*c*mid;
+    res=res/(1.0*(2*mid+1));
+    return res;
+}
+int main()
+{
+    Fast;
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        long long h,c,t;
+        cin>>h>>c>>t;
+        if(h==t){
+            cout<<1<<endl;
+        }
+        else if(2*t<=(h+c)){
+            cout<<2<<endl;
+        }
+        else{
+            long long right=1e12,left=0;
+            while(right-left>1){
+                long long mid=(left+right)/2;
+                //cout<<check(mid,h,c)<<endl;
+                if (check(mid,h,c)<(1.0*t)){
+                    right=mid;
+                }
+                else{
+                    left=mid;
+                }
+            }
+            //cout<<left<<" "<<right<<endl;
+            if(check(left,h,c)-1.0*t<=1.0*t-check(right,h,c)){
+                if (check(left,h,c)-1.0*t<=abs(0.5*(h+c)-t)){
+                    cout<<2*left+1<<endl;
+                }
+                else{
+                    cout<<2<<endl;
+                }
+            }
+            else{
+                if (1.0*t-check(right,h,c)<=abs(0.5*(h+c)-t)){
+                    cout<<2*right+1<<endl;;
+                }
+                else{
+                    cout<<2<<endl;
+                }
+            }
+        }
+    }
+}
