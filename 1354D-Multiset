@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+#define Fast ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define ll long long
+using namespace std;
+int tree[1000001];
+int n;
+void build(int idx,int val){
+    while(idx<=n){
+        tree[idx]+=val;
+        idx+=(idx&(-idx));
+    }
+}
+int query(int idx){
+    int sum=0;
+    while(idx>0){
+        sum+=tree[idx];
+        idx-=(idx&(-idx));
+    }
+    return sum;
+}
+int main()
+{
+    int q;
+    scanf("%d%d",&n,&q);
+    for(int i=0;i<n;i++){
+        int m;
+        scanf("%d",&m);
+        build(m,1);
+    }
+    while(q--){
+        int m;
+        scanf("%d",&m);
+        if(m>0){
+            build(m,1);
+        }
+        else{
+            int change=0;
+            int l=1;
+            int r=n;
+            m*=-1;
+            while(l<=r){
+                int mid=(l+r)/2;
+                int res=query(mid);
+                if(res>=m){
+                    change=mid;
+                    r=mid-1;
+                }
+                else{
+                    l=mid+1;
+                }
+            }
+            build(change,-1);
+        }
+    }
+    for(int i=1;i<=n;i++){
+        if(query(i)>query(i-1)){
+            printf("%d\n",i);
+            return 0;
+        }
+    }
+    printf("0\n");
+}
