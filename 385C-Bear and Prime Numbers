@@ -1,0 +1,74 @@
+#include<bits/stdc++.h>
+#define sz 10000007
+using namespace std;
+
+int num,num1,num2,num3,num4;
+int test;
+vector<int>prime;
+int p[sz];
+int pre[sz];
+void sieve()
+{
+    for(int i=4; i<sz; i+=2)
+    {
+        p[i]=1;
+    }
+    for(int i=3; i*i<sz; i+=2)
+    {
+        for(int j=i*i; j<sz; j+=(i*2))
+        {
+            p[j]=1;
+        }
+    }
+    prime.push_back(2);
+    for(int i=3; i<sz; i+=2)
+    {
+        if(p[i]==0)
+        {
+            prime.push_back(i);
+        }
+    }
+}
+void factor(int n)
+{
+    for(int i=0; i<prime.size() && prime[i]*prime[i]<=n; i++)
+    {
+        if(n%prime[i]==0)
+        {
+            pre[prime[i]]++;
+            while(n%prime[i]==0)
+            {
+                n/=prime[i];
+            }
+        }
+    }
+    if(n>1)
+    {
+        pre[n]++;
+    }
+}
+int main()
+{
+    sieve();
+    scanf("%d",&num1);
+    for(int i=1; i<=num1; i++)
+    {
+        scanf("%d",&num);
+        factor(num);
+    }
+    for(int i=2;i<sz-1;i++)
+    {
+        pre[i]=pre[i]+pre[i-1];
+    }
+    scanf("%d",&num2);
+    int l,r,ans;
+    while(num2--)
+    {
+        scanf("%d%d",&l,&r);
+        l=min(l,sz-7);
+        r=min(r,sz-7);
+        ans=pre[r]-pre[l-1];
+        printf("%d\n",ans);
+    }
+}
+ 
