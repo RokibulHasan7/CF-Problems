@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+#define Fast ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+using namespace std;
+long long a[100005];
+long long n,r,m,aa;
+long long dif(long long x){
+    long long sum=0LL;
+    long long a1=0LL,r1=0LL,m1=0LL;
+    for(int i=0;i<n;i++){
+        if(a[i]<x){
+            a1+=(x-a[i]);
+        }
+        if(a[i]>x){
+            r1+=(a[i]-x);
+        }
+    }
+    long long a_cost=a1*aa;
+    long long r_cost=r1*r;
+    long long mn=min(a1,r1);
+    long long m_cost=mn*m;
+    long long m_cost_total;
+    if(mn==r1){
+        m_cost_total=m_cost+(aa*(a1-r1));
+    }
+    else{
+        m_cost_total=m_cost+(r*(r1-a1));
+    }
+    long long ar_total=a_cost+r_cost;
+    return min(m_cost_total,ar_total);
+}
+void ternary_search(){
+    long long l=1;
+    long long r=1000000001;
+    long long ans=1e18;
+    for(int i=0;i<100;i++){
+        long long mid1=l+(r-l)/3;
+        long long mid2=r-(r-l)/3;
+        long long sum1=dif(mid1);
+        long long sum2=dif(mid2);
+        if(sum1<ans){
+            ans=sum1;
+        }
+        if(sum2<ans){
+            ans=sum2;
+        }
+        if(sum1>=sum2){
+            l=mid1;
+        }
+        else{
+            r=mid2;
+        }
+    }
+    cout<<ans<<endl;
+}
+int main(){
+    Fast;
+    cin>>n>>aa>>r>>m;
+    for(int i=0;i<n;i++){
+        cin>>a[i];
+    }
+    sort(a,a+n);
+    int ok=1;
+    for(int i=1;i<n;i++){
+        if(a[i]!=a[i-1]){
+            ok=0;
+        }
+    }
+    if(ok){
+        cout<<0<<endl;
+        return 0;
+    }
+    ternary_search();
+}
