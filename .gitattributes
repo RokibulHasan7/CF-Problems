@@ -22,5 +22,3 @@
 *.cc                                        linguist-language=C++
 *.cpp                                       linguist-language=C++
 *.c++                                       linguist-language=C++
-
-Samples/**                                  linguist-documentation=false
